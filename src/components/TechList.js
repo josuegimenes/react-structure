@@ -5,12 +5,38 @@ import TechItem from './TechItem';
 class TechList extends Component {
     state = {
         newTech: '',
-        techs: [
-            'Node.js',
-            'ReactJS',
-            'React Native',
-        ],
+        techs: [],
     };
+
+    /* CICLO DE VIDA DO COMPONENTE */
+    // Executado assim que o componente aparece em tela.
+    componentDidMount() {
+        const techs = localStorage.getItem('techs');
+
+        // verifica se há dados no localStorage
+        if (techs) {
+            this.setState({ techs: JSON.parse(techs) });
+        }
+    }
+
+    // Executado sempre que houver alterações nas props ou estado.
+    // componentDidUpdate(prevProps, prevState) {
+    componentDidUpdate(_, prevState) {
+        // this.props; this.state
+        // quando não utiliza prevProps ou prevState usa um underline _
+
+        // verifica se o estado anterior esta diferente do atual.
+        if (prevState.techs !== this.state.techs) {
+            localStorage.setItem('techs', JSON.stringify(this.state.techs));
+        }
+    }
+
+    // Executado quando o componente deixa de existir.
+    componentWillUnmount() {
+        // serve para limpar sujeiras que componentes possam deixa no App,
+        // como Event Listener que não morre no app e ficam ouvindo uma ação 
+        // do usuário.
+    }
 
     handleInputChange = e => {
         //console.log(e.target.value);
